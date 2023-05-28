@@ -9,6 +9,6 @@ public interface PazienteRepo extends CrudRepository<Paziente,Long> {
 
     ArrayList<Paziente> findByCodicefiscaleLike(String codicefiscale);
 
-    Paziente findByCodicefiscaleContaining(String codicefiscale);
+    Paziente findFirstByCodicefiscaleLike(String codicefiscale);
     
 }

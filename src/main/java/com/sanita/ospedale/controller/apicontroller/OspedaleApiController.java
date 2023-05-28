@@ -114,9 +114,13 @@ public class OspedaleApiController {
     @PostMapping("/api/v1/pazienti/assegna")
     public ResponseEntity<Object> assegnaMedico(@RequestParam(value = "key", defaultValue = "") String matricolaMedico,@RequestParam(value="key2", defaultValue="")String codiceFiscale) throws PazienteNonTrovatoException,MedicoNonTrovatoException {
 
+        String regex = "^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$|([0-9]{11})$";
+        if(!codiceFiscale.matches(regex)){
+            throw new PazienteNonTrovatoException();
+        }
         try {
             Medico medico = medicoRepo.findByMatricolaContaining(matricolaMedico);
-            Paziente paziente = pazienteRepo.findByCodicefiscaleContaining(codiceFiscale);
+            Paziente paziente = pazienteRepo.findFirstByCodicefiscaleLike(codiceFiscale);
     
             if (medico == null) {
                 throw new MedicoNonTrovatoException();
